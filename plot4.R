@@ -1,0 +1,15 @@
+df <- read.csv.sql("household_power_consumption.txt", sql = "select * from file where Date = '2/2/2007' or Date = '1/2/2007'",sep = ";", header=TRUE)
+df$DateTime <- strptime(paste(df$Date, df$Time), "%d/%m/%Y %H:%M:%S")
+png(file = "plot4.png", width = 480, height = 480)
+par(mfrow=c(2,2))
+with (df,{
+  plot(DateTime, as.numeric(Global_active_power), xlab="", ylab="Global Active Power (kilowatts)", type="l")
+  plot(DateTime, as.numeric(Voltage), type="l",  xlab="datetime", ylab="Voltage")
+  plot(DateTime, as.numeric(Sub_metering_1), xlab="", ylab="Energy sub metering", type="l")
+  points(DateTime, as.numeric(Sub_metering_2), col="red", type="l")
+  points(DateTime, as.numeric(Sub_metering_3), col="blue", type="l")
+  legend("topright", lty = c(1, 1, 1), bty = "n", col=c("black", "red", "blue"), legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"))
+  
+  plot(DateTime, as.numeric(Global_reactive_power), type="l",  xlab="datetime", ylab="Global_reactive_power")
+})
+dev.off()  
